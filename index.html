@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FawaNews – Live Sports Updates & Global Coverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0d1117;
+    --ink-2:     #161d27;
+    --ink-3:     #1e2a3a;
+    --amber:     #f5a623;
+    --amber-dim: rgba(245,166,35,0.12);
+    --amber-pale:#fef3dc;
+    --ice:       #e8f0fe;
+    --slate:     #8096b0;
+    --white:     #f4f8ff;
+    --live-red:  #e5334a;
+    --card-b:    rgba(255,255,255,0.05);
+    --line:      rgba(255,255,255,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════════════════
+     LIVE TICKER — signature element
+  ═══════════════════════════════ */
+  .ticker-bar {
+    background: var(--amber);
+    color: var(--ink);
+    height: 38px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-label {
+    background: var(--live-red);
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    padding: 0 18px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 2;
+    position: relative;
+  }
+  .ticker-label::after {
+    content: '';
+    position: absolute;
+    right: -10px; top: 0;
+    border-top: 19px solid transparent;
+    border-bottom: 19px solid transparent;
+    border-left: 10px solid var(--live-red);
+  }
+  .ticker-track {
+    display: flex;
+    animation: ticker 38s linear infinite;
+    white-space: nowrap;
+    padding-left: 32px;
+  }
+  .ticker-track span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    padding-right: 60px;
+    color: var(--ink);
+  }
+  .ticker-track span::before {
+    content: '●';
+    margin-right: 10px;
+    opacity: 0.5;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ═══════════════════════════════
+     NAV
+  ═══════════════════════════════ */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: rgba(13,17,23,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo { color: var(--amber); }
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--slate);
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+  .nav-links a:hover { color: var(--amber); }
+  .nav-cta {
+    background: var(--amber);
+    color: var(--ink);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 9px 22px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: opacity 0.18s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ═══════════════════════════════
+     HERO
+  ═══════════════════════════════ */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 88vh;
+    position: relative;
+    overflow: hidden;
+  }
+  /* left panel */
+  .hero-left {
+    padding: 72px 56px 72px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 2px;
+    background: var(--amber);
+  }
+  .hero-h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(58px, 7vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    color: #fff;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+  .hero-h1 .line-amber { color: var(--amber); font-style: italic; }
+  .hero-body {
+    font-size: 16px;
+    color: var(--slate);
+    max-width: 440px;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+  .hero-btns {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn-fill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--amber);
+    color: var(--ink);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px rgba(245,166,35,0.3);
+  }
+  .btn-fill:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,166,35,0.4); }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--white);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 26px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+  /* right panel — scoreboard mosaic */
+  .hero-right {
+    background: var(--ink-2);
+    border-left: 1px solid var(--line);
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 80% 30%, rgba(245,166,35,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .sport-panel {
+    border-bottom: 1px solid var(--line);
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .sport-panel:last-child { border-bottom: none; }
+  .sport-panel:hover { background: rgba(245,166,35,0.04); }
+  .sport-panel-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sport-panel-score {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 48px;
+    letter-spacing: -0.02em;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .sport-panel-score .sep { color: var(--amber); margin: 0 12px; }
+  .sport-panel-sub {
+    font-size: 13px;
+    color: var(--slate);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .sport-bg-text {
+    position: absolute;
+    right: -10px; bottom: -20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 110px;
+    letter-spacing: -0.04em;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ═══════════════════════════════
+     CONTAINER
+  ═══════════════════════════════ */
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 32px; }
+
+  /* ═══════════════════════════════
+     DIVIDER LABEL
+  ═══════════════════════════════ */
+  .sec-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--amber);
+    opacity: 0.8;
+    margin-bottom: 16px;
+  }
+  .sec-rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .sec-rule h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 4vw, 52px);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: #fff;
+    white-space: nowrap;
+  }
+  .sec-rule h2 i { color: var(--amber); font-style: italic; }
+  .sec-rule-line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* ═══════════════════════════════
+     SPORTS COVERED
+  ═══════════════════════════════ */
+  .sports-sec { padding: 80px 0; border-top: 1px solid var(--line); }
+  .sports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .sport-card {
+    background: var(--card-b);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    cursor: default;
+  }
+  .sport-card:hover {
+    border-color: rgba(245,166,35,0.4);
+    background: var(--amber-dim);
+    transform: translateY(-3px);
+  }
+  .sport-card .s-emoji { font-size: 28px; flex-shrink: 0; }
+  .sport-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .sport-card p { font-size: 12px; color: var(--slate); line-height: 1.4; }
+
+  /* ═══════════════════════════════
+     WHY FAWANEWS — diagonal cards
+  ═══════════════════════════════ */
+  .why-sec { padding: 80px 0; border-top: 1px solid var(--line); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .why-card {
+    padding: 36px 36px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .why-card:nth-child(even) { border-right: none; }
+  .why-card:nth-child(n+5) { border-bottom: none; }
+  .why-card:hover { background: rgba(245,166,35,0.04); }
+  .why-card .wc-icon {
+    font-size: 30px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .why-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .why-card p { font-size: 14px; color: var(--slate); line-height: 1.75; }
+  .why-card .wc-num {
+    position: absolute;
+    bottom: 16px; right: 20px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 64px;
+    color: rgba(245,166,35,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════
+     FEATURE TABLE
+  ═══════════════════════════════ */
+  .table-sec { padding: 80px 0; border-top: 1px solid var(--line); }
+  .table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: rgba(245,166,35,0.08); }
+  thead th {
+    padding: 14px 22px;
+    text-align: left;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    border-bottom: 1px solid var(--line);
+  }
+  tbody tr { border-bottom: 1px solid var(--line); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(245,166,35,0.04); }
+  td { padding: 14px 22px; color: var(--slate); vertical-align: top; }
+  td:first-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  /* ═══════════════════════════════
+     WORLD CUP / EVENT SPOTLIGHT
+  ═══════════════════════════════ */
+  .spotlight-sec { padding: 80px 0; border-top: 1px solid var(--line); }
+  .spotlight-inner {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .spotlight-left {
+    padding: 56px 48px;
+    background: linear-gradient(135deg, var(--ink-2) 0%, #0a1628 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .spotlight-left::before {
+    content: '⚽';
+    position: absolute;
+    font-size: 240px;
+    right: -40px; bottom: -40px;
+    opacity: 0.04;
+    line-height: 1;
+    filter: grayscale(1);
+  }
+  .spotlight-left h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 4vw, 56px);
+    text-transform: uppercase;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .spotlight-left h2 span { color: var(--amber); font-style: italic; }
+  .spotlight-left p { font-size: 15px; color: var(--slate); max-width: 380px; line-height: 1.8; margin-bottom: 32px; }
+  .spotlight-right {
+    border-left: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+  }
+  .spotlight-stat {
+    flex: 1;
+    border-bottom: 1px solid var(--line);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .spotlight-stat:last-child { border-bottom: none; }
+  .spotlight-stat .ss-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 42px;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .spotlight-stat .ss-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--slate);
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════
+     COMMUNITY / ENGAGEMENT
+  ═══════════════════════════════ */
+  .community-sec { padding: 80px 0; border-top: 1px solid var(--line); }
+  .community-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0 40px;
+  }
+  .chip {
+    background: var(--card-b);
+    border: 1px solid var(--line);
+    color: var(--slate);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 4px;
+    transition: border-color 0.15s, color 0.15s;
+    cursor: default;
+  }
+  .chip:hover { border-color: var(--amber); color: var(--amber); }
+  .community-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .comm-card {
+    background: var(--card-b);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 26px 24px;
+    transition: border-color 0.2s;
+  }
+  .comm-card:hover { border-color: rgba(245,166,35,0.3); }
+  .comm-card .cc-icon { font-size: 26px; margin-bottom: 12px; display: block; }
+  .comm-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .comm-card p { font-size: 13.5px; color: var(--slate); line-height: 1.65; }
+
+  /* ═══════════════════════════════
+     PROSE
+  ═══════════════════════════════ */
+  .prose-sec { padding: 80px 0; border-top: 1px solid var(--line); }
+  .prose-sec h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(28px, 4vw, 44px);
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .prose-sec p { font-size: 15.5px; color: var(--slate); max-width: 720px; line-height: 1.85; margin-bottom: 16px; }
+  .prose-sec a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ═══════════════════════════════
+     CTA BANNER
+  ═══════════════════════════════ */
+  .cta-banner-outer { padding: 0 32px 80px; max-width: 1060px; margin: 0 auto; }
+  .cta-banner {
+    background: var(--amber);
+    border-radius: 14px;
+    padding: 56px 52px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-banner::after {
+    content: 'LIVE';
+    position: absolute;
+    right: 220px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 180px;
+    color: rgba(0,0,0,0.05);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(30px, 4vw, 48px);
+    text-transform: uppercase;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .cta-banner p { font-size: 15px; color: rgba(13,17,23,0.7); max-width: 480px; }
+  .cta-banner-btns { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: var(--amber);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 26px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.15s;
+  }
+  .btn-dark:hover { opacity: 0.85; }
+  .btn-dark-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.15);
+    color: var(--ink);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 26px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .btn-dark-ghost:hover { background: rgba(0,0,0,0.25); }
+
+  /* ═══════════════════════════════
+     FOOTER
+  ═══════════════════════════════ */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+  .footer-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .footer-logo { color: var(--amber); }
+  footer p { font-size: 12px; color: rgba(128,150,176,0.5); font-family: 'Share Tech Mono', monospace; }
+
+  /* ═══════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════ */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 56px 28px; }
+    nav { padding: 16px 20px; }
+    .nav-links, .nav-cta { display: none; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-card { border-right: none !important; }
+    .spotlight-inner { grid-template-columns: 1fr; }
+    .spotlight-right { border-left: none; border-top: 1px solid var(--line); flex-direction: row; }
+    .spotlight-stat { border-bottom: none; border-right: 1px solid var(--line); }
+    .spotlight-stat:last-child { border-right: none; }
+    .community-grid { grid-template-columns: 1fr; }
+    .cta-banner { grid-template-columns: 1fr; padding: 40px 28px; }
+    .cta-banner::after { display: none; }
+    .cta-banner-btns { flex-direction: row; flex-wrap: wrap; }
+    footer { flex-direction: column; text-align: center; padding: 28px 20px; }
+    .wrap { padding: 0 20px; }
+    .sports-sec, .why-sec, .table-sec, .spotlight-sec, .community-sec, .prose-sec { padding: 56px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LIVE TICKER -->
+<div class="ticker-bar" aria-label="Live sports updates">
+  <div class="ticker-label">LIVE</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track">
+      <span>Champions League Quarterfinals — Matchday Preview</span>
+      <span>Premier League Title Race Enters Final Stretch</span>
+      <span>ICC Cricket World Cup Qualifier Results</span>
+      <span>Boxing World Title Bout Announced for Next Month</span>
+      <span>Rugby Six Nations — Weekend Round-Up</span>
+      <span>FIFA World Cup Qualification — Key Fixtures This Week</span>
+      <!-- duplicate for seamless loop -->
+      <span>Champions League Quarterfinals — Matchday Preview</span>
+      <span>Premier League Title Race Enters Final Stretch</span>
+      <span>ICC Cricket World Cup Qualifier Results</span>
+      <span>Boxing World Title Bout Announced for Next Month</span>
+      <span>Rugby Six Nations — Weekend Round-Up</span>
+      <span>FIFA World Cup Qualification — Key Fixtures This Week</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="https://fawanewslive.co.uk/" class="nav-logo">FawaNews</a>
+  <ul class="nav-links">
+    <li><a href="#">Football</a></li>
+    <li><a href="#">Cricket</a></li>
+    <li><a href="#">Boxing</a></li>
+    <li><a href="#">Rugby</a></li>
+    <li><a href="#">World Cup</a></li>
+  </ul>
+  <a href="https://fawanewslive.co.uk/" class="nav-cta">FawaNews</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Sports Coverage · Global · Live</p>
+    <h1 class="hero-h1">
+      Every<br>
+      Sport.<br>
+      <span class="line-amber">Every<br>Moment.</span>
+    </h1>
+    <p class="hero-body">FawaNews keeps you connected to the competitions, players, and tournaments that matter — football, cricket, boxing, rugby and beyond. Fast, flexible, mobile-first.</p>
+    <div class="hero-btns">
+      <a href="https://fawanewslive.co.uk/" class="btn-fill">FawaNews</a>
+      <a href="https://fawa-news--abdullah0009987.replit.app/" class="btn-ghost">Live Sports Updates</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="sport-panel">
+      <div class="sport-panel-tag">⚽ Football · Premier League</div>
+      <div class="sport-panel-score">Arsenal <span class="sep">2–1</span> City</div>
+      <div class="sport-panel-sub">FT · Matchday 34 · Live Coverage on FawaNews</div>
+      <div class="sport-bg-text">GOAL</div>
+    </div>
+    <div class="sport-panel">
+      <div class="sport-panel-tag">🏏 Cricket · Test Series</div>
+      <div class="sport-panel-score">ENG <span class="sep">341</span> AUS</div>
+      <div class="sport-panel-sub">Day 3 · Session 2 · Full Scorecard on FawaNews</div>
+      <div class="sport-bg-text">FOUR</div>
+    </div>
+  </div>
+</section>
+
+<!-- SPORTS COVERED -->
+<section class="sports-sec">
+  <div class="wrap">
+    <p class="sec-label">Coverage</p>
+    <div class="sec-rule">
+      <h2>Sports We <i>Cover</i></h2>
+      <div class="sec-rule-line"></div>
+    </div>
+    <div class="sports-grid">
+      <div class="sport-card">
+        <span class="s-emoji">⚽</span>
+        <div>
+          <h3>Football</h3>
+          <p>Premier League, Champions League, World Cup & more</p>
+        </div>
+      </div>
+      <div class="sport-card">
+        <span class="s-emoji">🏏</span>
+        <div>
+          <h3>Cricket</h3>
+          <p>Tests, ODIs, T20s and ICC tournaments</p>
+        </div>
+      </div>
+      <div class="sport-card">
+        <span class="s-emoji">🥊</span>
+        <div>
+          <h3>Boxing</h3>
+          <p>World title bouts, undercards & fighter news</p>
+        </div>
+      </div>
+      <div class="sport-card">
+        <span class="s-emoji">🏉</span>
+        <div>
+          <h3>Rugby</h3>
+          <p>Six Nations, Premiership & Super Rugby</p>
+        </div>
+      </div>
+      <div class="sport-card">
+        <span class="s-emoji">🏆</span>
+        <div>
+          <h3>Tournaments</h3>
+          <p>FIFA World Cup, ICC events & continental cups</p>
+        </div>
+      </div>
+      <div class="sport-card">
+        <span class="s-emoji">📊</span>
+        <div>
+          <h3>Stats & Tables</h3>
+          <p>Live standings, form guides & player data</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY FAWANEWS -->
+<section class="why-sec">
+  <div class="wrap">
+    <p class="sec-label">Why FawaNews</p>
+    <div class="sec-rule">
+      <h2>Built for <i>Fans</i></h2>
+      <div class="sec-rule-line"></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="wc-icon">⚡</span>
+        <h3>Instant Updates</h3>
+        <p>Goals, wickets, knockouts — FawaNews delivers match events as they happen, so you're never a step behind the action wherever you are.</p>
+        <span class="wc-num">01</span>
+      </div>
+      <div class="why-card">
+        <span class="wc-icon">📱</span>
+        <h3>Mobile-First Access</h3>
+        <p>Designed for the phone in your pocket. Full match coverage, standings and schedules load fast on any device, any connection speed.</p>
+        <span class="wc-num">02</span>
+      </div>
+      <div class="why-card">
+        <span class="wc-icon">🌍</span>
+        <h3>Global Competitions</h3>
+        <p>From London to Lahore, Cape Town to Melbourne — FawaNews covers the sports that matter to international audiences, not just local markets.</p>
+        <span class="wc-num">03</span>
+      </div>
+      <div class="why-card">
+        <span class="wc-icon">📅</span>
+        <h3>Year-Round Calendar</h3>
+        <p>Sport never stops and neither does FawaNews. Fixtures, previews, results and analysis run continuously across every major competition.</p>
+        <span class="wc-num">04</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE TABLE -->
+<section class="table-sec">
+  <div class="wrap">
+    <p class="sec-label">Platform Features</p>
+    <div class="sec-rule">
+      <h2>What You <i>Get</i></h2>
+      <div class="sec-rule-line"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>What it means for fans</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Live Sports Updates</td><td>Stay informed about competitions the moment things change on the pitch, court, or ring</td></tr>
+          <tr><td>Mobile Accessibility</td><td>Follow every sport from any device without missing a beat during commutes or travel</td></tr>
+          <tr><td>Tournament Coverage</td><td>End-to-end reporting on major events from qualifying rounds to championship finals</td></tr>
+          <tr><td>Multi-Sport Focus</td><td>Switch between football, cricket, boxing and rugby without leaving the platform</td></tr>
+          <tr><td>Global Sports Content</td><td>Comprehensive coverage of international leagues and competitions across time zones</td></tr>
+          <tr><td>Year-Round Schedule</td><td>Active coverage every month — no off-season gaps in your sports information</td></tr>
+          <tr><td>Easy Navigation</td><td>Find the sport, team, or tournament you care about in seconds</td></tr>
+          <tr><td>Community Engagement</td><td>Stay connected to the broader fan conversation around every major event</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- WORLD CUP SPOTLIGHT -->
+<section class="spotlight-sec">
+  <div class="wrap">
+    <p class="sec-label">Event Spotlight</p>
+    <div class="sec-rule">
+      <h2>FIFA World <i>Cup</i></h2>
+      <div class="sec-rule-line"></div>
+    </div>
+    <div class="spotlight-inner">
+      <div class="spotlight-left">
+        <h2>The World's<br><span>Biggest Stage</span></h2>
+        <p>The FIFA World Cup captures the attention of billions across every country and culture. When qualification begins, group draws are announced, and knockout matches unfold — fans everywhere need a reliable source that keeps pace with every development.</p>
+        <p style="margin-top:14px;">FawaNews provides continuous World Cup coverage from opening fixtures to the final whistle of the championship game.</p>
+        <a href="https://fawanewslive.co.uk/" class="btn-fill" style="margin-top:28px;display:inline-flex;">FawaNews</a>
+      </div>
+      <div class="spotlight-right">
+        <div class="spotlight-stat">
+          <div class="ss-val">32+</div>
+          <div class="ss-label">Nations Covered</div>
+        </div>
+        <div class="spotlight-stat">
+          <div class="ss-val">64</div>
+          <div class="ss-label">Matches Per Tournament</div>
+        </div>
+        <div class="spotlight-stat">
+          <div class="ss-val">1B+</div>
+          <div class="ss-label">Global Viewers</div>
+        </div>
+        <div class="spotlight-stat">
+          <div class="ss-val">24/7</div>
+          <div class="ss-label">FawaNews Coverage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community-sec">
+  <div class="wrap">
+    <p class="sec-label">Fan Engagement</p>
+    <div class="sec-rule">
+      <h2>Sports Are <i>Better</i> Together</h2>
+      <div class="sec-rule-line"></div>
+    </div>
+    <div class="community-chips">
+      <span class="chip">Match Previews</span>
+      <span class="chip">Player Performances</span>
+      <span class="chip">League Standings</span>
+      <span class="chip">Transfer News</span>
+      <span class="chip">Injury Reports</span>
+      <span class="chip">Tactical Analysis</span>
+      <span class="chip">Tournament Draws</span>
+      <span class="chip">Team News</span>
+      <span class="chip">Competition Schedules</span>
+    </div>
+    <div class="community-grid">
+      <div class="comm-card">
+        <span class="cc-icon">🗣️</span>
+        <h4>Fan Discussions</h4>
+        <p>Staying informed means joining the conversation with confidence — predicting results, debating selections, and celebrating performances with fellow supporters.</p>
+      </div>
+      <div class="comm-card">
+        <span class="cc-icon">📡</span>
+        <h4>Flexible Access</h4>
+        <p>Work, travel, and different time zones shouldn't cut you off from the sport you love. FawaNews fits around your schedule, not the other way around.</p>
+      </div>
+      <div class="comm-card">
+        <span class="cc-icon">🔮</span>
+        <h4>Always Evolving</h4>
+        <p>Smarter recommendations, faster delivery, and better mobile experiences are shaping the next generation of digital sports coverage — and FawaNews is part of it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROSE -->
+<section class="prose-sec">
+  <div class="wrap">
+    <p class="sec-label">About</p>
+    <h2>More Than Just Scores</h2>
+    <p>The most dedicated supporters want context, not just results. They follow transfer windows, track form over a season, analyse tactics after a defeat, and anticipate what a key injury means for the weeks ahead. <a href="https://fawanewslive.co.uk/">FawaNews</a> is built around that depth of engagement — a platform where the story behind the scoreline is just as accessible as the scoreline itself.</p>
+    <p>Whether you're on your morning commute catching up on overnight cricket results, or tracking a live knockout round from a different time zone, the <a href="https://fawa-news--abdullah0009987.replit.app/">Live Sports Updates</a> keeps you in the loop without friction. Sports audiences have changed. FawaNews has changed with them.</p>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner-outer">
+  <div class="cta-banner">
+    <div>
+      <h2>Never Miss a Moment</h2>
+      <p>Scores, fixtures, tournament updates, and breaking sports news — all in one place, built for fans who can't afford to be last.</p>
+    </div>
+    <div class="cta-banner-btns">
+      <a href="https://fawanewslive.co.uk/" class="btn-dark">FawaNews</a>
+      <a href="https://fawa-news--abdullah0009987.replit.app/" class="btn-dark-ghost">Live Sports Updates</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="https://fawanewslive.co.uk/" class="footer-logo">FawaNews</a>
+  <p>Your modern hub for global sports coverage & live updates.</p>
+  <p>© 2025 FawaNews. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
